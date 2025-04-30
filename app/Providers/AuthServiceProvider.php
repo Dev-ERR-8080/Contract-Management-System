@@ -4,7 +4,8 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-
+use MongoDB\Laravel\Auth\MongoUserProvider;
+use Illuminate\Support\Facades\Auth;
 class AuthServiceProvider extends ServiceProvider
 {
     /**

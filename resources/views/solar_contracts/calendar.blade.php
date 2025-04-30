@@ -1,5 +1,4 @@
-@extends('layouts.app')
-
+<x-app-layout>
 @section('content')
 <div class="max-w-5xl mx-auto p-6">
     <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
@@ -91,3 +90,4 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 </script>
 @endsection
+</x-app-layout>

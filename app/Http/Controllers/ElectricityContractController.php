@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ElectricityContract;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage; // If you want template file uploads
+use Auth;
 
 class ElectricityContractController extends Controller
 {
@@ -69,26 +68,39 @@ class ElectricityContractController extends Controller
             'payment_status' => 'nullable|string|max:50',
             'last_payment_date' => 'nullable|date',
             'next_billing_date' => 'nullable|date',
-            'service_location_coordinates' => 'nullable|string|max:255',
             'power_capacity_kw' => 'nullable|numeric',
             'voltage_level' => 'nullable|string|max:100',
             'supply_type' => 'nullable|string|max:100',
             'billing_cycle' => 'nullable|string|max:50',
             'terms_and_conditions' => 'nullable|string',
             'notes' => 'nullable|string',
-            'assigned_to' => 'nullable|exists:users,id',
+            'assigned_to' => 'nullable|string',
         ]);
 
-        $validatedData['contract_id'] = $this->generateContractId();
         $validatedData['contract_duration'] = Carbon::parse($validatedData['contract_start_date'])
             ->diffInMonths(Carbon::parse($validatedData['contract_end_date']));
         $validatedData['created_by'] = Auth::id();
         $validatedData['updated_by'] = Auth::id();
 
-        CustomerContract::create($validatedData);
+        if (!empty($validatedData['service_location_coordinates'])) {
+            $coords = explode(',', $validatedData['service_location_coordinates']);
+            if (count($coords) === 2) {
+                $validatedData['service_location_coordinates'] = [
+                    'lat' => trim($coords[0]),
+                    'lng' => trim($coords[1]),
+                ];
+            } else {
+                // Handle invalid input format gracefully if needed
+                $validatedData['service_location_coordinates'] = null;
+            }
+        }
+        
 
-        return redirect()->route('customer-contracts.index')
-            ->with('success', 'Customer contract created successfully.');
+        ElectricityContract::create($validatedData);
+
+        return redirect()->route('electricity_contracts.index')
+    ->with('success', 'Customer contract created successfully.');
+
     }
 
     /**
@@ -112,7 +124,7 @@ class ElectricityContractController extends Controller
     /**
      * Update contract details.
      */
-    public function update(Request $request, CustomerContract $customerContract)
+    public function update(Request $request, ElectricityContract $electricityContract)
     {
         $validatedData = $request->validate([
             'customer_name' => 'required|string|max:255',
@@ -145,10 +157,10 @@ class ElectricityContractController extends Controller
             ->diffInMonths(Carbon::parse($validatedData['contract_end_date']));
         $validatedData['updated_by'] = Auth::id();
 
-        $customerContract->update($validatedData);
+        $electricityContract->update($validatedData);
 
-        return redirect()->route('customer-contracts.index')
-            ->with('success', 'Customer contract updated successfully.');
+        return redirect()->route('electricity_contracts.index')
+            ->with('success', 'electricity contract updated successfully.');
     }
 
     /**

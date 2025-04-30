@@ -1,4 +1,4 @@
-@extends('layouts.app')
+<x-app-layout>
 
 @section('content')
 <div class="max-w-5xl mx-auto py-8">
@@ -50,7 +50,7 @@
 
             <div>
                 <label class="block font-semibold mb-1">Contract Start Date</label>
-                <input type="date" name="contract_start_date" class="w-full border rounded p-2" required>
+                <input type="date" name="contract_start_date" value="{{ old('contract_start_date') }}" class="w-full border rounded p-2" required>
             </div>
 
             <div>
@@ -94,8 +94,8 @@
             </div>
 
             <div>
-                <label class="block font-semibold mb-1">Service Location Coordinates</label>
-                <input type="text" name="service_location_coordinates" class="w-full border rounded p-2">
+                    <label class="block font-semibold mb-1">Service Location Coordinates (lat,lng)</label>
+                    <input type="text" name="service_location_coordinates" class="w-full border rounded p-2" placeholder="e.g. 28.61,77.23">
             </div>
 
             <div>
@@ -151,3 +151,4 @@
     </form>
 </div>
 @endsection
+</x-app-layout>

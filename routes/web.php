@@ -7,17 +7,12 @@ use App\Http\Controllers\ElectricityContractController;
 use App\Http\Controllers\Electricity\DashboardController as ElectricityDashboardController;
 use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\Solar\DashboardController as SolarDashboardController;
-use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ProfileController;
 
 // Welcome / Root
-Route::get('/', function () {
-    return view('welcome');
-});
 
 // Unified Main Dashboard
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
 
 
 // 🔌 Electricity Module
@@ -55,6 +50,8 @@ Route::prefix('electricity-contracts')->name('electricity_contracts.')->group(fu
     Route::put('/{id}', [ElectricityContractController::class, 'update'])->name('update');
     Route::delete('/{id}', [ElectricityContractController::class, 'destroy'])->name('destroy');
     Route::get('/{id}/invoice', [ElectricityContractController::class, 'invoice'])->name('invoice');
+    
+    Route::resource('customers', CustomerController::class);
 });
 
 
@@ -63,6 +60,23 @@ Route::resource('solar_products', SolarProductController::class);
 
 Route::get('/solar/installation-dates', [SolarContractController::class, 'installationDates'])->name('solar.installation.dates');
 
+
+
+
+
+Route::get('/', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
 // Cleanup: Placeholder route for '/home'
 // Route::get('/home', function () {
 //     return redirect()->route('dashboard'); // redirecting for now

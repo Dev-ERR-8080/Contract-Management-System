@@ -1,4 +1,4 @@
-{{-- resources/views/solar_contracts/index.blade.php --}}
+
 @extends('layouts.app')
 
 @section('content')

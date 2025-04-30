@@ -33,7 +33,7 @@
                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Address</th>
                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Total Cost</th>
                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Installation Date</th>
-                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Work</th>
                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
@@ -41,10 +41,10 @@
                 @foreach($contracts as $contract)
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 text-sm text-gray-900">{{ $contract->customer_name }}</td>
-                        <td class="px-6 py-4 text-sm text-gray-500">{{ $contract->site_address }}</td>
-                        <td class="px-6 py-4 text-sm text-gray-500">₹{{ number_format($contract->total_cost, 2) }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">{{ $contract->customer_address }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">₹{{ number_format($contract->contract_amount, 2) }}</td>
                         <td class="px-6 py-4 text-sm text-gray-500">{{ $contract->installation_date }}</td>
-                        <td class="px-6 py-4 text-sm text-gray-500">{{ $contract->status }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">{{ $contract->installation_type }}</td>
                         <td class="px-6 py-4 text-sm font-medium flex gap-2 flex-wrap">
                             <a href="{{ route('electricity_contracts.edit', $contract->_id) }}"
                                class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full hover:bg-blue-600 hover:text-white transition">
@@ -66,10 +66,7 @@
                                 👁️ View
                             </a>
 
-                            <!-- <a href="{{ route('electricity.quotes.create', $contract->_id) }}"
-                               class="inline-block px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full hover:bg-yellow-500 hover:text-white transition">
-                                💬 Quotes
-                            </a> -->
+                            
                         </td>
                     </tr>
                 @endforeach
